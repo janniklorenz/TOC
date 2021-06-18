@@ -23,7 +23,7 @@ public protocol TOCContent {
 public struct TOC {
     private var tocItems: [TOC.Entry] = []
     
-    init(@TOC.Builder _ content: () -> [TOC.Entry]) {
+    public init(@TOC.Builder _ content: () -> [TOC.Entry]) {
         self.tocItems = content()
     }
     
