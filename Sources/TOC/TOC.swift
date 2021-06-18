@@ -23,7 +23,7 @@ public protocol TOCContent {
 public struct TOC {
     private var tocItems: [TOC.Entry] = []
     
-    init(@Builder _ content: () -> [TOC.Entry]) {
+    init(@TOC.Builder _ content: () -> [TOC.Entry]) {
         self.tocItems = content()
     }
     
@@ -209,7 +209,7 @@ extension View {
 extension TOC {
     @resultBuilder
     public struct Builder {
-        public static func buildBlock() -> [Entry] { [] }
+        public static func buildBlock() -> [TOC.Entry] { [] }
         
         public static func buildBlock(_ values: TOCEntryConvertible...) -> [TOC.Entry] {
             values.flatMap { $0.asEntry() }
