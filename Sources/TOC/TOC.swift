@@ -108,14 +108,15 @@ extension TOC {
         }
 
         static let alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-        init<T>(data: [T], convert: (T) -> (id: AnyHashable, title: String) ) {
+        
+        public init<T>(data: [T], convert: (T) -> (id: AnyHashable, title: String) ) {
             let tocCandidates = data.map(convert)
             self.items = Self.alphabet.compactMap { letter in
                 tocCandidates.first { $0.title.uppercased().hasPrefix(letter) }
             }.map { TOC.Item(.letter(String($0.title.uppercased().prefix(1))), id: $0.id)}
         }
         
-        init<T: TOCContent>(data: [T]) {
+        public init<T: TOCContent>(data: [T]) {
             self.init(data: data, convert: T.toItem)
         }
     }
