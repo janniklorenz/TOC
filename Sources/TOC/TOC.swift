@@ -99,23 +99,27 @@ extension TOC {
 }
 
 
-//extension TOC {
-//    struct ItemGroup {
-//        var items: [TOCItem]
-//
-//        init(items: [TOCItem]) {
-//            self.items = items
-//        }
-//
-//        static let alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-//        init<T>(data: [T], convert: (T) -> (id: AnyHashable, title: String) ) {
-//            let tocCandidates = data.map(convert)
-//            self.items = Self.alphabet.compactMap { letter in
-//                tocCandidates.first { $0.title.uppercased().hasPrefix(letter) }
-//            }.map { TOCItem(.letter(String($0.title.uppercased().prefix(1))), id: $0.id)}
-//        }
-//    }
-//}
+extension TOC {
+    public struct ItemGroup {
+        var items: [TOC.Item]
+
+        init(items: [TOC.Item]) {
+            self.items = items
+        }
+
+        static let alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+        init<T>(data: [T], convert: (T) -> (id: AnyHashable, title: String) ) {
+            let tocCandidates = data.map(convert)
+            self.items = Self.alphabet.compactMap { letter in
+                tocCandidates.first { $0.title.uppercased().hasPrefix(letter) }
+            }.map { TOC.Item(.letter(String($0.title.uppercased().prefix(1))), id: $0.id)}
+        }
+        
+        init<T: TOCContent>(data: [T]) {
+            self.init(data: data, convert: T.toItem)
+        }
+    }
+}
 
 
 
