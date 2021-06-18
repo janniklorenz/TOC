@@ -23,11 +23,11 @@ public protocol Content {
 public struct TOC {
     private var tocItems: [Entry] = []
     
-    init(@TOC.Builder _ content: () -> [TOC.Entry]) {
+    init(@Builder _ content: () -> [Entry]) {
         self.tocItems = content()
     }
     
-    func getItems(limit: Int) -> [TOC.Item] {
+    func getItems(limit: Int) -> [Item] {
         let totalItems = tocItems.reduce(0) { $0 + $1.count }
         return tocItems.reduce([]) { result, toc in
             switch toc {
@@ -48,16 +48,14 @@ public struct TOC {
 
 // MARK: Abstract Entry
 
-extension TOC {
-    public enum Entry {
-        case item(item: TOC.Item)
-        case items(items: [TOC.Item])
-        
-        var count: Int {
-            switch self {
-            case .item(_): return 1
-            case .items(let items): return items.count
-            }
+public enum Entry {
+    case item(item: Item)
+    case items(items: [Item])
+    
+    var count: Int {
+        switch self {
+        case .item(_): return 1
+        case .items(let items): return items.count
         }
     }
 }
@@ -94,13 +92,13 @@ public struct Item: Hashable {
     }
 }
 
-public static var Placeholder = Item.Kind.placeholder
+public var Placeholder = Item.Kind.placeholder
 
 
 struct ItemGroup {
-    var items: [TOC.Item]
+    var items: [Item]
     
-    init(items: [TOC.Item]) {
+    init(items: [Item]) {
         self.items = items
     }
     
@@ -109,7 +107,7 @@ struct ItemGroup {
         let tocCandidates = data.map(convert)
         self.items = Self.alphabet.compactMap { letter in
             tocCandidates.first { $0.title.uppercased().hasPrefix(letter) }
-        }.map { TOC.Item(.letter(String($0.title.uppercased().prefix(1))), id: $0.id)}
+        }.map { Item(.letter(String($0.title.uppercased().prefix(1))), id: $0.id)}
     }
 }
 
@@ -122,7 +120,7 @@ fileprivate struct ItemSliderView: View {
     let toc: TOC
     @GestureState private var dragLocation: CGPoint = .zero
     @State var isHover = false
-    @State var selectedItem: TOC.Item?
+    @State var selectedItem: Item?
     
     var body: some View {
         GeometryReader { geometry in
@@ -156,13 +154,13 @@ fileprivate struct ItemSliderView: View {
         }
     }
 
-    func dragObserver(item: TOC.Item) -> some View {
+    func dragObserver(item: Item) -> some View {
         GeometryReader { geometry in
             dragObserver(geometry: geometry, item: item)
         }
     }
 
-    func dragObserver(geometry: GeometryProxy, item: TOC.Item) -> some View {
+    func dragObserver(geometry: GeometryProxy, item: Item) -> some View {
         if geometry.frame(in: .global).contains(dragLocation) {
             DispatchQueue.main.async {
                 selectedItem = item
@@ -180,15 +178,15 @@ extension View {
         }
     }
     
-    public func toc(@TOC.Builder _ content: @escaping () -> [TOC.Entry]) -> some View {
+    public func toc(@Builder _ content: @escaping () -> [Entry]) -> some View {
         ScrollViewReader { proxy in
             self.toc(proxy: proxy, content)
         }
     }
     
-    public func toc(proxy: ScrollViewProxy, @TOC.Builder _ content: @escaping () -> [TOC.Entry]) -> some View {
+    public func toc(proxy: ScrollViewProxy, @Builder _ content: @escaping () -> [Entry]) -> some View {
         self.overlay(
-            TOC.ItemSliderView(proxy: proxy, toc: TOC(content))
+            ItemSliderView(proxy: proxy, toc: TOC(content))
         )
     }
 }
@@ -199,9 +197,9 @@ extension View {
 
 @resultBuilder
 public struct Builder {
-    static func buildBlock() -> [TOC.Entry] { [] }
+    static func buildBlock() -> [Entry] { [] }
     
-    static func buildBlock(_ values: EntryConvertible...) -> [TOC.Entry] {
+    static func buildBlock(_ values: EntryConvertible...) -> [Entry] {
         values.flatMap { $0.asEntry() }
     }
 
@@ -222,23 +220,23 @@ public protocol EntryConvertible {
     func asEntry() -> [Entry]
 }
 
-extension TOC.Item: EntryConvertible {
+extension Item: EntryConvertible {
     public func asEntry() -> [Entry] { [Entry.item(item: self)] }
 }
 
-extension TOC.ItemGroup: EntryConvertible {
+extension ItemGroup: EntryConvertible {
     public func asEntry() -> [Entry] {
-        [TOC.Entry.items(items: self.items)]
+        [Entry.items(items: self.items)]
     }
 }
 
-extension TOC.Item.Kind: EntryConvertible {
+extension Item.Kind: EntryConvertible {
     public func asEntry() -> [Entry] {
-        TOC.Item(self).asEntry()
+        Item(self).asEntry()
     }
 }
 
-extension Array: EntryConvertible where Element == TOC.Entry {
+extension Array: EntryConvertible where Element == Entry {
     public func asEntry() -> [Entry] { self }
 }
 
