@@ -50,8 +50,8 @@ public struct TOC {
 
 extension TOC {
     public enum Entry {
-        case item(item: TOCItem)
-        case items(items: [TOCItem])
+        case item(item: TOC.Item)
+        case items(items: [TOC.Item])
         
         var count: Int {
             switch self {
@@ -64,9 +64,9 @@ extension TOC {
 
 
 
-// MARK: Item and ItemGroup
+// MARK: Item
 
-extension {
+extension TOC {
     public struct Item: Hashable {
         fileprivate var uuid = UUID()
         var id: AnyHashable?
@@ -95,7 +95,7 @@ extension {
         }
     }
 
-    public static var Placeholder = TOCItem.Kind.placeholder
+    public static var Placeholder = TOC.Item.Kind.placeholder
 }
 
 
@@ -238,13 +238,13 @@ extension TOC.Item: TOCEntryConvertible {
 //    }
 //}
 
-extension Item.Kind: TOCEntryConvertible {
-    public func asEntry() -> [TOCEntry] {
+extension TOC.Item.Kind: TOCEntryConvertible {
+    public func asEntry() -> [TOC.Entry] {
         TOC.Item(self).asEntry()
     }
 }
 
-extension Array: EntryConvertible where Element == TOC.Entry {
+extension Array: TOCEntryConvertible where Element == TOC.Entry {
     public func asEntry() -> [TOC.Entry] { self }
 }
 
@@ -252,7 +252,7 @@ extension Array: EntryConvertible where Element == TOC.Entry {
 
 // MARK: Array squeeze helper
 
-extension Array where Element == TOC:Item {
+extension Array where Element == TOC.Item {
     func squeeze(_ totalItemsFittable: Int) -> [TOC.Item] {
         if totalItemsFittable >= self.count - 2 {
             return self
