@@ -12,7 +12,7 @@ import SwiftUI
 
 // MARK: TOCContent protocol
 
-protocol TOCContent {
+public protocol TOCContent {
     static func toItem(item: Self) -> (id: AnyHashable, title: String)
 }
 
@@ -20,7 +20,7 @@ protocol TOCContent {
 
 // MARK: Mail TOC struct
 
-struct TOC {
+public struct TOC {
     private var tocItems: [Entry] = []
     
     init(@TOC.Builder _ content: () -> [TOC.Entry]) {
@@ -42,11 +42,6 @@ struct TOC {
             }
         }
     }
-    
-//    func overlay(proxy: ScrollViewProxy) -> some View {
-//        TOC.ItemSliderView(proxy: proxy, toc: self)
-////            .padding()
-//    }
 }
 
 
@@ -54,7 +49,7 @@ struct TOC {
 // MARK: Abstract Entry
 
 extension TOC {
-    enum Entry {
+    public enum Entry {
         case item(item: TOC.Item)
         case items(items: [TOC.Item])
         
@@ -72,7 +67,7 @@ extension TOC {
 // MARK: Item and ItemGroup
 
 extension TOC {
-    struct Item: Hashable {
+    public struct Item: Hashable {
         fileprivate var uuid = UUID()
         var id: AnyHashable?
         var value: Kind
@@ -82,7 +77,7 @@ extension TOC {
             self.value = kind
         }
         
-        enum Kind: Hashable {
+        public enum Kind: Hashable {
             case letter(_ string: String)
             case symbol(_ name: String)
             case placeholder
@@ -100,7 +95,7 @@ extension TOC {
         }
     }
     
-    static var Placeholder = Item.Kind.placeholder
+    public static var Placeholder = Item.Kind.placeholder
 }
 
 extension TOC {
@@ -184,19 +179,19 @@ extension TOC {
 }
 
 extension View {
-    func toc(_ entry: TOCEntryConvertible) -> some View {
+    public func toc(_ entry: TOCEntryConvertible) -> some View {
         self.toc {
             entry
         }
     }
     
-    func toc(@TOC.Builder _ content: @escaping () -> [TOC.Entry]) -> some View {
+    public func toc(@TOC.Builder _ content: @escaping () -> [TOC.Entry]) -> some View {
         ScrollViewReader { proxy in
             self.toc(proxy: proxy, content)
         }
     }
     
-    func toc(proxy: ScrollViewProxy, @TOC.Builder _ content: @escaping () -> [TOC.Entry]) -> some View {
+    public func toc(proxy: ScrollViewProxy, @TOC.Builder _ content: @escaping () -> [TOC.Entry]) -> some View {
         self.overlay(
             TOC.ItemSliderView(proxy: proxy, toc: TOC(content))
         )
@@ -209,7 +204,7 @@ extension View {
 
 extension TOC {
     @resultBuilder
-    struct Builder {
+    public struct Builder {
         static func buildBlock() -> [TOC.Entry] { [] }
         
         static func buildBlock(_ values: TOCEntryConvertible...) -> [TOC.Entry] {
@@ -230,28 +225,28 @@ extension TOC {
     }
 }
 
-protocol TOCEntryConvertible {
+public protocol TOCEntryConvertible {
     func asEntry() -> [TOC.Entry]
 }
 
 extension TOC.Item: TOCEntryConvertible {
-    func asEntry() -> [TOC.Entry] { [TOC.Entry.item(item: self)] }
+    public func asEntry() -> [TOC.Entry] { [TOC.Entry.item(item: self)] }
 }
 
 extension TOC.ItemGroup: TOCEntryConvertible {
-    func asEntry() -> [TOC.Entry] {
+    public func asEntry() -> [TOC.Entry] {
         [TOC.Entry.items(items: self.items)]
     }
 }
 
 extension TOC.Item.Kind: TOCEntryConvertible {
-    func asEntry() -> [TOC.Entry] {
+    public func asEntry() -> [TOC.Entry] {
         TOC.Item(self).asEntry()
     }
 }
 
 extension Array: TOCEntryConvertible where Element == TOC.Entry {
-    func asEntry() -> [TOC.Entry] { self }
+    public func asEntry() -> [TOC.Entry] { self }
 }
 
 
