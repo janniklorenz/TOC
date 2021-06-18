@@ -183,7 +183,7 @@ fileprivate struct ItemSliderView: View {
 }
 
 extension View {
-    public func toc(_ entry: TOCEntryConvertible) -> some View {
+    public func toc(entry: TOCEntryConvertible) -> some View {
         self.toc {
             entry
         }
