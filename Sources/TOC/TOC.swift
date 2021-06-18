@@ -23,7 +23,7 @@ public protocol TOCContent {
 public struct TOC {
     private var tocItems: [TOC.Entry] = []
     
-    public init(@TOC.Builder _ content: () -> [TOC.Entry]) {
+    init(@TOC.Builder _ content: () -> [TOC.Entry]) {
         self.tocItems = content()
     }
     
@@ -72,7 +72,7 @@ extension TOC {
         var id: AnyHashable?
         var value: Kind
         
-        init(_ kind: Kind, id: AnyHashable? = nil) {
+        public init(_ kind: Kind, id: AnyHashable? = nil) {
             self.id = id
             self.value = kind
         }
