@@ -183,13 +183,13 @@ fileprivate struct ItemSliderView: View {
 }
 
 extension View {
-    public func toc(entry: TOCEntryConvertible) -> some View {
+    public func toc(_ entry: TOCEntryConvertible) -> some View {
         self.toc {
             entry
         }
     }
     
-    public func toc(@TOC.Builder builder content: @escaping () -> [TOC.Entry]) -> some View {
+    public func toc(@TOC.Builder _ content: @escaping () -> [TOC.Entry]) -> some View {
         ScrollViewReader { proxy in
             self.toc(proxy: proxy, content)
         }
