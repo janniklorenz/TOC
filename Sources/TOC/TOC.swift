@@ -49,7 +49,7 @@ public struct TOC {
 // MARK: Abstract Entry
 
 extension TOC {
-    enum Entry {
+    public enum Entry {
         case item(item: TOCItem)
         case items(items: [TOCItem])
         
@@ -99,23 +99,23 @@ extension {
 }
 
 
-extension TOC {
-    struct ItemGroup {
-        var items: [TOCItem]
-        
-        init(items: [TOCItem]) {
-            self.items = items
-        }
-        
-        static let alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-        init<T>(data: [T], convert: (T) -> (id: AnyHashable, title: String) ) {
-            let tocCandidates = data.map(convert)
-            self.items = Self.alphabet.compactMap { letter in
-                tocCandidates.first { $0.title.uppercased().hasPrefix(letter) }
-            }.map { TOCItem(.letter(String($0.title.uppercased().prefix(1))), id: $0.id)}
-        }
-    }
-}
+//extension TOC {
+//    struct ItemGroup {
+//        var items: [TOCItem]
+//
+//        init(items: [TOCItem]) {
+//            self.items = items
+//        }
+//
+//        static let alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+//        init<T>(data: [T], convert: (T) -> (id: AnyHashable, title: String) ) {
+//            let tocCandidates = data.map(convert)
+//            self.items = Self.alphabet.compactMap { letter in
+//                tocCandidates.first { $0.title.uppercased().hasPrefix(letter) }
+//            }.map { TOCItem(.letter(String($0.title.uppercased().prefix(1))), id: $0.id)}
+//        }
+//    }
+//}
 
 
 
@@ -232,11 +232,11 @@ extension TOC.Item: TOCEntryConvertible {
     public func asEntry() -> [TOC.Entry] { [TOC.Entry.item(item: self)] }
 }
 
-extension ItemGroup: TOCEntryConvertible {
-    public func asEntry() -> [TOC.Entry] {
-        [TOC.Entry.items(items: self.items)]
-    }
-}
+//extension ItemGroup: TOCEntryConvertible {
+//    public func asEntry() -> [TOC.Entry] {
+//        [TOC.Entry.items(items: self.items)]
+//    }
+//}
 
 extension Item.Kind: TOCEntryConvertible {
     public func asEntry() -> [TOCEntry] {
