@@ -209,21 +209,21 @@ extension View {
 extension TOC {
     @resultBuilder
     public struct Builder {
-        static func buildBlock() -> [Entry] { [] }
+        public static func buildBlock() -> [Entry] { [] }
         
-        static func buildBlock(_ values: TOCEntryConvertible...) -> [TOC.Entry] {
+        public static func buildBlock(_ values: TOCEntryConvertible...) -> [TOC.Entry] {
             values.flatMap { $0.asEntry() }
         }
 
-        static func buildIf(_ value: TOCEntryConvertible?) -> TOCEntryConvertible {
+        public static func buildIf(_ value: TOCEntryConvertible?) -> TOCEntryConvertible {
             value ?? []
         }
 
-        static func buildEither(first: TOCEntryConvertible) -> TOCEntryConvertible {
+        public static func buildEither(first: TOCEntryConvertible) -> TOCEntryConvertible {
             first
         }
 
-        static func buildEither(second: TOCEntryConvertible) -> TOCEntryConvertible {
+        public static func buildEither(second: TOCEntryConvertible) -> TOCEntryConvertible {
             second
         }
     }
