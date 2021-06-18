@@ -236,11 +236,11 @@ extension TOC.Item: TOCEntryConvertible {
     public func asEntry() -> [TOC.Entry] { [TOC.Entry.item(item: self)] }
 }
 
-//extension ItemGroup: TOCEntryConvertible {
-//    public func asEntry() -> [TOC.Entry] {
-//        [TOC.Entry.items(items: self.items)]
-//    }
-//}
+extension TOC.ItemGroup: TOCEntryConvertible {
+    public func asEntry() -> [TOC.Entry] {
+        [TOC.Entry.items(items: self.items)]
+    }
+}
 
 extension TOC.Item.Kind: TOCEntryConvertible {
     public func asEntry() -> [TOC.Entry] {
