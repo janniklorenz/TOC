@@ -40,7 +40,7 @@ struct SwiftUIView: View {
             }
             Section {
                 ForEach(store.data) { d in
-                    Text(d.title)
+                    Text(d.title).id(d.id)
                 }
             }
         }.listStyle(GroupedListStyle())
