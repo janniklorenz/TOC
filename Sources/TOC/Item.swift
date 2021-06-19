@@ -49,17 +49,20 @@ extension TOC {
             self.items = items
         }
 
-        static let alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+        static public let Alphabet = [
+            "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+            "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+        ]
         
-        public init<T>(data: [T], convert: (T) -> (id: AnyHashable, title: String) ) {
+        public init<T>(data: [T], marker: [String] = Self.Alphabet, convert: (T) -> (id: AnyHashable, title: String) ) {
             let tocCandidates = data.map(convert)
-            self.items = Self.alphabet.compactMap { letter in
+            self.items = marker.compactMap { letter in
                 tocCandidates.first { $0.title.uppercased().hasPrefix(letter) }
             }.map { TOC.Item(.letter(String($0.title.uppercased().prefix(1))), id: $0.id)}
         }
         
-        public init<T: TOCContent>(data: [T]) {
-            self.init(data: data, convert: { ($0.id, $0.tocTitle) })
+        public init<T: TOCContent>(data: [T], marker: [String] = Self.Alphabet) {
+            self.init(data: data, marker: marker, convert: { ($0.id, $0.tocTitle) })
         }
     }
 }

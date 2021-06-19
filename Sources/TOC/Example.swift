@@ -14,7 +14,7 @@ struct DemoModel: TOCContent, Identifiable {
     var tocTitle: String { return title }
 }
 
-struct SwiftUIView: View {
+struct DemoDataStore: TOCEntryConvertible {
     var data = [
         DemoModel(title: "Aaaa"),
         DemoModel(title: "Aaaa"),
@@ -43,13 +43,21 @@ struct SwiftUIView: View {
         DemoModel(title: "Ffff"),
     ]
     
+    func asEntry() -> [TOC.Entry] {
+        return TOC.ItemGroup(data: data).asEntry()
+    }
+}
+
+struct SwiftUIView: View {
+    var store = DemoDataStore()
+    
     var body: some View {
         List {
             Section {
                 Text("Demo").id("demo")
             }
             Section {
-                ForEach(data) { d in
+                ForEach(store.data) { d in
                     Text(d.title)
                 }
             }
@@ -57,7 +65,7 @@ struct SwiftUIView: View {
         .toc {
             TOC.Item(.symbol("checkmark.circle"), id: "demo")
             TOC.Placeholder
-            TOC.ItemGroup(data: data)
+            store
         }
     }
 }
