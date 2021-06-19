@@ -11,9 +11,7 @@ struct DemoModel: TOCContent, Identifiable {
     var id = UUID()
     var title: String
     
-    func toItem() -> (id: AnyHashable, title: String) {
-        return (id, title)
-    }
+    var tocTitle: String { return title }
 }
 
 struct SwiftUIView: View {
@@ -47,12 +45,20 @@ struct SwiftUIView: View {
     
     var body: some View {
         List {
-            ForEach(data) { d in
-                Text(d.title)
+            Section {
+                Text("Demo").id("demo")
             }
+            Section {
+                ForEach(data) { d in
+                    Text(d.title)
+                }
+            }
+        }.listStyle(GroupedListStyle())
+        .toc {
+            TOC.Item(.symbol("checkmark.circle"), id: "demo")
+            TOC.Placeholder
+            TOC.ItemGroup(data: data)
         }
-//        .toc(TOC.ItemGroup(data: data))
-        .toc { data }
     }
 }
 
@@ -61,10 +67,3 @@ struct SwiftUIView_Previews: PreviewProvider {
         SwiftUIView()
     }
 }
-
-
-//extension Array: TOCEntryConvertible where Element: TOCContent {
-//    func asEntry() -> [TOC.Entry] {
-//        TOC.ItemGroup(data: self).asEntry()
-//    }
-//}

@@ -59,7 +59,7 @@ extension TOC {
         }
         
         public init<T: TOCContent>(data: [T]) {
-            self.init(data: data, convert: { $0.toItem() })
+            self.init(data: data, convert: { ($0.id, $0.tocTitle) })
         }
     }
 }

@@ -42,13 +42,6 @@ public protocol TOCEntryConvertible {
     func asEntry() -> [TOC.Entry]
 }
 
-public extension TOCEntryConvertible {
-    func asEntry() -> [TOC.Entry] {
-        fatalError("TOCEntryConvertible not implemented")
-        return []
-    }
-}
-
 extension TOC.Item: TOCEntryConvertible {
     public func asEntry() -> [TOC.Entry] { [TOC.Entry.item(item: self)] }
 }
@@ -65,14 +58,6 @@ extension TOC.Item.Kind: TOCEntryConvertible {
     }
 }
 
-extension Array where Element == TOC.Entry {
+extension Array: TOCEntryConvertible where Element == TOC.Entry {
     public func asEntry() -> [TOC.Entry] { self }
 }
-
-extension Array where Element: TOCContent {
-    public func asEntry() -> [TOC.Entry] {
-        TOC.ItemGroup(data: self).asEntry()
-    }
-}
-
-extension Array: TOCEntryConvertible {}

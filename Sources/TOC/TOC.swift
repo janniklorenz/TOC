@@ -12,9 +12,8 @@ import SwiftUI
 
 // MARK: Content protocol
 
-public protocol TOCContent {
-    func toItem() -> (id: AnyHashable, title: String)
-//    static func toItem(item: Self) -> (id: AnyHashable, title: String)
+public protocol TOCContent: Identifiable {
+    var tocTitle: String { get }
 }
 
 
