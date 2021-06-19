@@ -16,32 +16,14 @@ struct DemoModel: TOCContent, Identifiable {
 
 struct DemoDataStore: TOCEntryConvertible {
     var data = [
-        DemoModel(title: "Aaaa"),
-        DemoModel(title: "Aaaa"),
-        DemoModel(title: "Aaaa"),
-        DemoModel(title: "Aaaa"),
-        DemoModel(title: "Aaaa"),
-        DemoModel(title: "Bbbb"),
-        DemoModel(title: "Bbbb"),
-        DemoModel(title: "Bbbb"),
-        DemoModel(title: "Bbbb"),
-        DemoModel(title: "Bbbb"),
-        DemoModel(title: "Cccc"),
-        DemoModel(title: "Cccc"),
-        DemoModel(title: "Cccc"),
-        DemoModel(title: "Cccc"),
-        DemoModel(title: "Cccc"),
-        DemoModel(title: "Dddd"),
-        DemoModel(title: "Dddd"),
-        DemoModel(title: "Dddd"),
-        DemoModel(title: "Dddd"),
-        DemoModel(title: "Dddd"),
-        DemoModel(title: "Eeee"),
-        DemoModel(title: "Ffff"),
-        DemoModel(title: "Ffff"),
-        DemoModel(title: "Ffff"),
-        DemoModel(title: "Ffff"),
+        "Liam", "Olivia", "Noah", "Emma",
+        "Oliver", "Ava", "Elijah", "Charlotte",
+        "William", "Sophia", "James", "Amelia",
+        "Benjamin", "Isabella", "Lucas", "Mia",
+        "Henry", "Evelyn", "Alexander", "Harper"
     ]
+    .sorted()
+    .map { DemoModel(title: $0) }
     
     func asEntry() -> [TOC.Entry] {
         return TOC.ItemGroup(data: data).asEntry()
@@ -54,7 +36,7 @@ struct SwiftUIView: View {
     var body: some View {
         List {
             Section {
-                Text("Demo").id("demo")
+                Text("Header").id("Header")
             }
             Section {
                 ForEach(store.data) { d in
@@ -63,7 +45,7 @@ struct SwiftUIView: View {
             }
         }.listStyle(GroupedListStyle())
         .toc {
-            TOC.Item(.symbol("checkmark.circle"), id: "demo")
+            TOC.Item(.symbol("checkmark.circle"), id: "Header")
             TOC.Placeholder
             store
         }
