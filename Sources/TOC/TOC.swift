@@ -65,6 +65,22 @@ extension TOC {
 
 
 
+extension TOC {
+    public enum Position {
+        case leading
+        case trailing
+        
+        var asEdgeSet: Edge.Set {
+            switch self {
+            case .leading: return .leading
+            case .trailing: return .trailing
+            }
+        }
+    }
+}
+
+
+
 // MARK: Array squeeze helper
 
 extension Array where Element == TOC.Item {

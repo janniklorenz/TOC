@@ -45,7 +45,6 @@ public protocol TOCEntryConvertible {
 public extension TOCEntryConvertible {
     func asEntry() -> [TOC.Entry] {
         fatalError("TOCEntryConvertible not implemented")
-        return []
     }
 }
 

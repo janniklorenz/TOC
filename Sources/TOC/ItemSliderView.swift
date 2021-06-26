@@ -11,6 +11,7 @@ import SwiftUI
 struct ItemSliderView: View {
     let proxy: ScrollViewProxy
     let toc: TOC
+    let position: TOC.Position
     @GestureState private var dragLocation: CGPoint = .zero
     @State var isHover = false
     @State var selectedItem: TOC.Item?
@@ -43,7 +44,7 @@ struct ItemSliderView: View {
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 Spacer()
             }
-            .padding(.trailing, 8)
+            .padding(position.asEdgeSet, 8)
         }
     }
 
