@@ -11,48 +11,44 @@ struct DemoModel: TOCContent, Identifiable {
     var id = UUID()
     var title: String
     
-    func toItem() -> (id: AnyHashable, title: String) {
-        return (id, title)
+    var tocTitle: String { return title }
+}
+
+struct DemoDataStore: TOCEntryConvertible {
+    var data = [
+        "Liam", "Olivia", "Noah", "Emma",
+        "Oliver", "Ava", "Elijah", "Charlotte",
+        "William", "Sophia", "James", "Amelia",
+        "Benjamin", "Isabella", "Lucas", "Mia",
+        "Henry", "Evelyn", "Alexander", "Harper"
+    ]
+    .sorted()
+    .map { DemoModel(title: $0) }
+    
+    func asEntry() -> [TOC.Entry] {
+        return TOC.ItemGroup(data: data).asEntry()
     }
 }
 
 struct SwiftUIView: View {
-    var data = [
-        DemoModel(title: "Aaaa"),
-        DemoModel(title: "Aaaa"),
-        DemoModel(title: "Aaaa"),
-        DemoModel(title: "Aaaa"),
-        DemoModel(title: "Aaaa"),
-        DemoModel(title: "Bbbb"),
-        DemoModel(title: "Bbbb"),
-        DemoModel(title: "Bbbb"),
-        DemoModel(title: "Bbbb"),
-        DemoModel(title: "Bbbb"),
-        DemoModel(title: "Cccc"),
-        DemoModel(title: "Cccc"),
-        DemoModel(title: "Cccc"),
-        DemoModel(title: "Cccc"),
-        DemoModel(title: "Cccc"),
-        DemoModel(title: "Dddd"),
-        DemoModel(title: "Dddd"),
-        DemoModel(title: "Dddd"),
-        DemoModel(title: "Dddd"),
-        DemoModel(title: "Dddd"),
-        DemoModel(title: "Eeee"),
-        DemoModel(title: "Ffff"),
-        DemoModel(title: "Ffff"),
-        DemoModel(title: "Ffff"),
-        DemoModel(title: "Ffff"),
-    ]
+    var store = DemoDataStore()
     
     var body: some View {
         List {
-            ForEach(data) { d in
-                Text(d.title)
+            Section {
+                Text("Header").id("Header")
             }
+            Section {
+                ForEach(store.data) { d in
+                    Text(d.title).id(d.id)
+                }
+            }
+        }.listStyle(GroupedListStyle())
+        .toc {
+            TOC.Item(.symbol("checkmark.circle"), id: "Header")
+            TOC.Placeholder
+            store
         }
-//        .toc(TOC.ItemGroup(data: data))
-        .toc { data }
     }
 }
 
@@ -61,10 +57,3 @@ struct SwiftUIView_Previews: PreviewProvider {
         SwiftUIView()
     }
 }
-
-
-//extension Array: TOCEntryConvertible where Element: TOCContent {
-//    func asEntry() -> [TOC.Entry] {
-//        TOC.ItemGroup(data: self).asEntry()
-//    }
-//}
