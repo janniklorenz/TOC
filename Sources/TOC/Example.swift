@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DemoModel: TOCContent, Identifiable {
+struct DemoModel: TOCContent {
     var id = UUID()
     var title: String
     
@@ -32,6 +32,7 @@ struct DemoDataStore: TOCEntryConvertible {
 
 struct SwiftUIView: View {
     var store = DemoDataStore()
+    var position = TOC.Position.leading
     
     var body: some View {
         List {
@@ -42,9 +43,11 @@ struct SwiftUIView: View {
                 ForEach(store.data) { d in
                     Text(d.title).id(d.id)
                 }
+                
             }
-        }.listStyle(GroupedListStyle())
-        .toc {
+        }
+        .listStyle(GroupedListStyle())
+        .toc(position: position) {
             TOC.Item(.symbol("checkmark.circle"), id: "Header")
             TOC.Placeholder
             store
@@ -55,5 +58,6 @@ struct SwiftUIView: View {
 struct SwiftUIView_Previews: PreviewProvider {
     static var previews: some View {
         SwiftUIView()
+        SwiftUIView(position: .trailing)
     }
 }

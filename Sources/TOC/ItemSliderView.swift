@@ -18,33 +18,38 @@ struct ItemSliderView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            VStack {
-                Spacer()
+            HStack {
                 VStack {
-                    ForEach(toc.getItems(limit: Int(geometry.size.height*0.80 / 20.0)), id: \.uuid) { item in
-                        item.toView
-                            .opacity(item == selectedItem ? 1.0 : 0.75)
-                            .foregroundColor(.accentColor)
-                            .font(.footnote)
-                            .frame(width: 40, height: 20)
-                            .contentShape(Rectangle())
-                            .background(dragObserver(item: item))
+                    Spacer()
+                    VStack {
+                        ForEach(toc.getItems(limit: Int(geometry.size.height*0.80 / 20.0)), id: \.uuid) { item in
+                            item.toView
+                                .opacity(item == selectedItem ? 1.0 : 0.75)
+                                .foregroundColor(.accentColor)
+                                .font(.footnote)
+                                .frame(width: 40, height: 20)
+                                .contentShape(Rectangle())
+                                .background(dragObserver(item: item))
+                        }
+                        .frame(width: 10)
                     }
-                    .frame(width: 10)
+                    .padding(4)
+                    .background(Color(UIColor.tertiarySystemBackground).opacity(isHover ? 1.0 : 0))
+                    .cornerRadius(6)
+                    .gesture(
+                        DragGesture(minimumDistance: 0, coordinateSpace: .global)
+                            .updating($dragLocation) { value, state, _ in state = value.location }
+                            .onChanged({ _ in isHover = true })
+                            .onEnded({ _ in isHover = false })
+                    )
+                    Spacer()
                 }
-                .padding(4)
-                .background(Color(UIColor.tertiarySystemBackground).opacity(isHover ? 1.0 : 0))
-                .cornerRadius(6)
-                .gesture(
-                    DragGesture(minimumDistance: 0, coordinateSpace: .global)
-                        .updating($dragLocation) { value, state, _ in state = value.location }
-                        .onChanged({ _ in isHover = true })
-                        .onEnded({ _ in isHover = false })
-                )
-                .frame(maxWidth: .infinity, alignment: .trailing)
-                Spacer()
+                .padding(position.asEdgeSet, position.padding)
+                if position == .leading {
+                    Spacer()
+                }
             }
-            .padding(position.asEdgeSet, 8)
+            .frame(maxWidth: .infinity, alignment: .trailing)
         }
     }
 

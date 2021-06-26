@@ -75,6 +75,13 @@ extension TOC {
             case .trailing: return .trailing
             }
         }
+        
+        var padding: CGFloat {
+            switch self {
+            case .leading: return 0
+            case .trailing: return 8
+            }
+        }
     }
 }
 

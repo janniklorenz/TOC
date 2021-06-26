@@ -21,8 +21,6 @@ extension View {
     }
     
     public func toc(proxy: ScrollViewProxy, position: TOC.Position = .trailing, @TOC.Builder _ content: @escaping () -> [TOC.Entry]) -> some View {
-        self.overlay(
-            ItemSliderView(proxy: proxy, toc: TOC(content), position: position)
-        )
+        self.overlay(ItemSliderView(proxy: proxy, toc: TOC(content), position: position))
     }
 }
